@@ -1,12 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+/*
+入口js
+ */
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {Provider} from 'react-redux'
 
-import App from './App.js';
-import memoryUtils from './utils/memoryUtils';
-import storageUtils from './utils/storageUtils';
+import store from './redux/store'
+import App from './App'
 
-// 取出local中保存的 user数据，并存储到 memoryUtils；
-const user = storageUtils.getUser();
-memoryUtils.user = user;
-
-ReactDOM.render(<App />, document.getElementById('root'));
+// 将App组件标签渲染到index页面的div上
+ReactDOM.render((
+  <Provider store={store}>
+    <App />
+  </Provider>
+), document.getElementById('root'))
