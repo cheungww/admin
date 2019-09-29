@@ -1,48 +1,62 @@
-import React, { Component } from 'react';
-import { Form, Icon, Input, Button, message } from 'antd';
-import { Redirect } from "react-router-dom";
+import React, {Component} from 'react'
+import {Redirect} from 'react-router-dom'
+import {
+  Form,
+  Icon,
+  Input,
+  Button,
+} from 'antd'
+import {connect} from 'react-redux'
 
-import './login.less';
-import logo from '../../assets/images/logo.jpg';
-import { reqLogin } from '../../api/index';
-import memoryUtils from '../../utils/memoryUtils';
-import storageUtils from '../../utils/storageUtils';
+import './login.less'
+import logo from '../../assets/images/logo.jpg'
+import {login} from '../../redux/actions'
 
-import Password from 'antd/lib/input/Password';
+const Item = Form.Item // 不能写在import之前
 
-const { Item: FormItem } = Form;
-
+/*
+登陆的路由组件
+ */
 class Login extends Component {
 
   handleSubmit = (event) => {
-    event.preventDefault();
 
+    // 阻止事件的默认行为
+    event.preventDefault()
+
+    // 对所有表单字段进行检验
     this.props.form.validateFields(async (err, values) => {
+      // 检验成功
       if (!err) {
-        const { username, password } = values;
-        const result = await reqLogin(username, password);
-        if (result.status === 0) {
-          message.success('登录成功');
+        // console.log('提交登陆的ajax请求', values)
+        // 请求登陆
+        const {username, password} = values
 
-          const user = result.data;
-          memoryUtils.user = user; // 保存在内存中
-          storageUtils.saveUser(user); // 保存在local中
-          // 跳转到管理界面 (不需要再回退回到登陆)
-          this.props.history.replace('/');
-        } else {
-          message.error(result.msg);
-        }
+        // 调用分发异步action的函数 => 发登陆的异步请求, 有了结果后更新状态
+        this.props.login(username, password)
+
       } else {
-        console.log('检验失败');
+        console.log('检验失败!')
       }
-    })
+    });
 
-    // const { form } = this.props;
-    // const values = form.getFieldsValue();
-    // console.log('handleSubmit', values);
-    
+    // 得到form对象
+    // const form = this.props.form
+    // // 获取表单项的输入数据
+    // const values = form.getFieldsValue()
+    // console.log('handleSubmit()', values)
   }
 
+  /*
+  对密码进行自定义验证
+  */
+  /*
+   用户名/密码的的合法性要求
+     1). 必须输入
+     2). 必须大于等于4位
+     3). 必须小于等于12位
+     4). 必须是英文、数字或下划线组成
+    */
   validatePwd = (rule, value, callback) => {
     console.log('validatePwd()', rule, value)
     if(!value) {
@@ -62,24 +76,26 @@ class Login extends Component {
   render () {
 
     // 如果用户已经登陆, 自动跳转到管理界面
-    const user = memoryUtils.user
+    const user = this.props.user
     if(user && user._id) {
-      return <Redirect to='/'/>
+      return <Redirect to='/home'/>
     }
-    
-    const { form } = this.props;
+
+    // 得到具强大功能的form对象
+    const form = this.props.form
     const { getFieldDecorator } = form;
 
     return (
       <div className="login">
         <header className="login-header">
           <img src={logo} alt="logo"/>
-          <h1>React项目：后台管理系统</h1>
+          <h1>React项目: 后台管理系统</h1>
         </header>
         <section className="login-content">
-          <h2>用户登录</h2>
+          <div className={user.errorMsg ? 'error-msg show' : 'error-msg'}>{user.errorMsg}</div>
+          <h2>用户登陆</h2>
           <Form onSubmit={this.handleSubmit} className="login-form">
-            <FormItem>
+            <Item>
               {
                 /*
               用户名/密码的的合法性要求
@@ -90,59 +106,53 @@ class Login extends Component {
                */
               }
               {
-                getFieldDecorator('username', { // 声明式验证: 直接使用别人定义好的验证规则进行验证
+                getFieldDecorator('username', { // 配置对象: 属性名是特定的一些名称
+                  // 声明式验证: 直接使用别人定义好的验证规则进行验证
                   rules: [
-                    { required: true, whitespace: true, message: "用户必须输入用户名" },
-                    { min: 4, messgae: '用户名至少要4位' },
+                    { required: true, whitespace: true, message: '用户名必须输入' },
+                    { min: 4, message: '用户名至少4位' },
                     { max: 12, message: '用户名最多12位' },
-                    { pattern: /^[a-zA-Z0-9_]+$/, message: '必须是英文、数字或下划线组成,且不允许空格'}
+                    { pattern: /^[a-zA-Z0-9_]+$/, message: '用户名必须是英文、数字或下划线组成' },
                   ],
+                  initialValue: 'admin', // 初始值
                 })(
                   <Input
                     prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                    placeholder="Username"
+                    placeholder="用户名"
                   />
                 )
               }
-            </FormItem>
-            <FormItem>
+            </Item>
+            <Form.Item>
               {
                 getFieldDecorator('password', {
                   rules: [
                     {
                       validator: this.validatePwd
                     }
-                  ]})(
+                  ]
+                })(
                   <Input
                     prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                     type="password"
-                    placeholder="Password"
+                    placeholder="密码"
                   />
                 )
               }
-            </FormItem>
-            <FormItem>
+
+            </Form.Item>
+            <Form.Item>
               <Button type="primary" htmlType="submit" className="login-form-button">
-                登录
+                登陆
               </Button>
-            </FormItem>
+            </Form.Item>
           </Form>
         </section>
       </div>
-    );
+    )
   }
 }
 
-
-const WrapLogin = Form.create()(Login);
-export default WrapLogin;
-
-/*
-1. 前台表单验证
-2. 收集表单输入数据
- */
-
- 
 /*
 1. 高阶函数
     1). 一类特别的函数
@@ -165,4 +175,26 @@ export default WrapLogin;
 /*
 包装Form组件生成一个新的组件: Form(Login)
 新组件会向Form组件传递一个强大的对象属性: form
+ */
+const WrapLogin = Form.create()(Login)
+export default connect(
+  state => ({user: state.user}),
+  {login}
+)(WrapLogin)
+
+
+/*
+1. 前台表单验证
+2. 收集表单输入数据
+ */
+
+/*
+async和await
+1. 作用?
+   简化promise对象的使用: 不用再使用then()来指定成功/失败的回调函数
+   以同步编码(没有回调函数了)方式实现异步流程
+2. 哪里写await?
+    在返回promise的表达式左侧写await: 不想要promise, 想要promise异步执行的成功的value数据
+3. 哪里写async?
+    await所在函数(最近的)定义的左侧写async
  */

@@ -13,6 +13,7 @@ import PicturesWall from './pictures-wall'
 import RichTextEditor from './rich-text-editor'
 import LinkButton from '../../components/link-button'
 import {reqCategorys, reqAddOrUpdateProduct} from '../../api'
+import memoryUtils from "../../utils/memoryUtils";
 
 const {Item} = Form
 const { TextArea } = Input
@@ -177,11 +178,18 @@ class ProductAddUpdate extends PureComponent {
 
   componentWillMount () {
     // 取出携带的state
-    const product = this.props.location.state  // 如果是添加没值, 否则有值
+    const product = memoryUtils.product  // 如果是添加没值, 否则有值
     // 保存是否是更新的标识
-    this.isUpdate = !!product
+    this.isUpdate = !!product._id
     // 保存商品(如果没有, 保存是{})
     this.product = product || {}
+  }
+
+  /*
+  在卸载之前清除保存的数据
+  */
+  componentWillUnmount () {
+    memoryUtils.product = {}
   }
 
   render() {
@@ -297,7 +305,7 @@ export default Form.create()(ProductAddUpdate)
 
 /*
 使用ref
-1. 创建ref容器: this.pw = React.createRef()
+1. 创建ref容器: thi.pw = React.createRef()
 2. 将ref容器交给需要获取的标签元素: <PictureWall ref={this.pw} />
 3. 通过ref容器读取标签元素: this.pw.current
  */
