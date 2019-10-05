@@ -1,68 +1,70 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
 
-In the project directory, you can run:
+### webpack配置
 
-### `npm start`
+- 一个前端资源加载/打包工具
+- 使用版本：3.10.0
+- yarn add webpack@3.10.0 --dev
+- 多个版本 webpack 共存解决方案
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+需要处理的文件类型
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+HTML --> html-webpack-plugin
 
-### `npm test`
+脚本（es6、react） --》 babel + babel-preset-react
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+样式 --》 css-loader + sass-loader
 
-### `npm run build`
+图片/字体 --》 url-loader + file-loader
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+webpack 常用模块
 
-### `npm run eject`
+- html-webpack-plugin，html 单独打包成文件
+- extract-text-webpack-plugin，样式打包成单独文件
+- CommonsChunkPlugin，提出通用模块
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+webpack-dev-server
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- 为webpack 项目提供web服务
+- 使用版本：2.9.7
+- 更改代码自动刷新，路径转发
+- yarn add webpack-dev-server@2.9.7 --dev
+- 解决多版本共存问题
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+代码的上线前准备
 
-### Code Splitting
+- 增加上线需要的适配代码
+- 提交 pull request
+- 将代码合并到master分支
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
 
-### Analyzing the Bundle Size
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+生产环境配置
 
-### Making a Progressive Web App
+- 安装Nodejs
+- 安装yarn
+- 安装git，并配置权限
+- 安装nginx
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
 
-### Advanced Configuration
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+代码发布过程
 
-### Deployment
+- 拉取最新master分支的代码
+- 项目初始化
+- 执行线上环境的打包编译
+- 复制dist目录到目标目录
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
 
-### `npm run build` fails to minify
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+nginx和域名配置
+
+- ngnix中vhost的配置
+- 通过指定hosts方式做线上回归测试
+- 更改域名解析
