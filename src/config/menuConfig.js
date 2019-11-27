@@ -57,11 +57,11 @@ const menuList = [
     ]
   },
 
-  {
-    title: '订单管理',
+/*   {
+    title: '订单管理', // 订单管理待开发
     key: '/order',
     icon: 'windows',
-  },
+  }, */
 ]
 
 export default menuList

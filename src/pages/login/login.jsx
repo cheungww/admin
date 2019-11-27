@@ -58,7 +58,7 @@ class Login extends Component {
      4). 必须是英文、数字或下划线组成
     */
   validatePwd = (rule, value, callback) => {
-    console.log('validatePwd()', rule, value)
+    // console.log('validatePwd()', rule, value)
     if(!value) {
       callback('密码必须输入')
     } else if (value.length<4) {
