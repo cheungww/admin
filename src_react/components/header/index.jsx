@@ -84,7 +84,7 @@ class Header extends Component {
   }
   /*
   // 不能这么做: 不会更新显示
-  componentWillMount () {
+  UNSAFE_componentWillMount () {
     this.title = this.getTitle()
   }*/
 

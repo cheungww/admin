@@ -20,7 +20,7 @@ class AddForm extends Component {
     parentId: PropTypes.string.isRequired, // 父分类的ID
   }
 
-  componentWillMount () {
+  UNSAFE_componentWillMount () {
     this.props.setForm(this.props.form)
   }
 

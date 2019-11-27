@@ -20,7 +20,7 @@ class UserForm extends PureComponent {
     user: PropTypes.object
   }
 
-  componentWillMount () {
+  UNSAFE_componentWillMount () {
     this.props.setForm(this.props.form)
   }
 

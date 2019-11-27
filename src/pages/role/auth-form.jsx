@@ -54,7 +54,7 @@ export default class AuthForm extends PureComponent {
   };
 
 
-  componentWillMount () {
+  UNSAFE_componentWillMount () {
     this.treeNodes = this.getTreeNodes(menuList)
   }
 
@@ -62,8 +62,8 @@ export default class AuthForm extends PureComponent {
   /*
   当组件接收到新的属性时自动调用
    */
-  componentWillReceiveProps (nextProps) {
-    console.log('componentWillReceiveProps()', nextProps)
+  UNSAFE_componentWillReceiveProps (nextProps) {
+    console.log('UNSAFE_componentWillReceiveProps()', nextProps)
     const menus = nextProps.role.menus
     this.setState({
       checkedKeys: menus

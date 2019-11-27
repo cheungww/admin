@@ -74,7 +74,7 @@ export default class Category extends Component {
         this.setState({
           categorys
         })
-        console.log('----', this.state.categorys.length)
+        // console.log('----', this.state.categorys.length)
       } else {
         // 更新二级分类状态
         this.setState({
@@ -216,7 +216,7 @@ export default class Category extends Component {
   /*
   为第一次render()准备数据
    */
-  componentWillMount () {
+  UNSAFE_componentWillMount () {
     this.initColumns()
   }
 

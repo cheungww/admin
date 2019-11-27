@@ -141,7 +141,7 @@ export default class User extends Component {
     }
   }
 
-  componentWillMount () {
+  UNSAFE_componentWillMount () {
     this.initColumns()
   }
 

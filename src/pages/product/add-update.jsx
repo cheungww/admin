@@ -176,7 +176,7 @@ class ProductAddUpdate extends PureComponent {
     this.getCategorys('0')
   }
 
-  componentWillMount () {
+  UNSAFE_componentWillMount () {
     // 取出携带的state
     const product = memoryUtils.product  // 如果是添加没值, 否则有值
     // 保存是否是更新的标识

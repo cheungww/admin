@@ -70,7 +70,7 @@ class Role extends Component {
   onRow = (role) => {
     return {
       onClick: event => { // 点击行
-        console.log('row onClick()', role)
+        // console.log('row onClick()', role)
         // alert('点击行')
         this.setState({
           role
@@ -161,7 +161,7 @@ class Role extends Component {
     }
   }
 
-  componentWillMount () {
+  UNSAFE_componentWillMount () {
     this.initColumn()
   }
 
