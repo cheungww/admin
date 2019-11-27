@@ -12,9 +12,9 @@ import jsonp from 'jsonp'
 import {message} from 'antd'
 import ajax from './ajax'
 
-// const BASE = '/api'
+const BASE = '/api'
 // const BASE = 'http://localhost:5000'
-const BASE = ''
+// const BASE = ''
 // 登陆
 /*
 export function reqLogin(username, password) {
