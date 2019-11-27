@@ -12,7 +12,8 @@ import jsonp from 'jsonp'
 import {message} from 'antd'
 import ajax from './ajax'
 
-const BASE = 'http://localhost:5000'
+const BASE = '/api'
+// const BASE = 'http://localhost:5000'
 // const BASE = ''
 // 登陆
 /*
