@@ -33,8 +33,6 @@ export default function ajax(url, data={}, type='GET') {
       message.error('请求出错了: ' + error.message)
     })
   })
-
-
 }
 
 // 请求登陆接口

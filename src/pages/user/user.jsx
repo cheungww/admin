@@ -110,23 +110,34 @@ export default class User extends Component {
    */
   addOrUpdateUser = async () => {
 
-    this.setState({isShow: false})
+    // 对所有表单字段进行检验
+    this.form.validateFields(async (err, values) => {
+      // 检验成功
+      if (!err) {
+        
+        // 1. 收集输入数据
+        const user = this.form.getFieldsValue()
+        // 如果是更新, 需要给user指定_id属性
+        if (this.user) {
+          user._id = this.user._id
+        }
+        
+        // 2. 提交添加的请求
+        const result = await reqAddOrUpdateUser(user)
+        // 3. 更新列表显示
+        if(result.status===0) {
+          this.setState({isShow: false})
+          this.form.resetFields()
+          message.success(`${this.user ? '修改' : '添加'}用户成功`)
+          this.getUsers()
+        } else {
+          message.error(result.msg)
+        }
 
-    // 1. 收集输入数据
-    const user = this.form.getFieldsValue()
-    this.form.resetFields()
-    // 如果是更新, 需要给user指定_id属性
-    if (this.user) {
-      user._id = this.user._id
-    }
-
-    // 2. 提交添加的请求
-    const result = await reqAddOrUpdateUser(user)
-    // 3. 更新列表显示
-    if(result.status===0) {
-      message.success(`${this.user ? '修改' : '添加'}用户成功`)
-      this.getUsers()
-    }
+      } else {
+        message.error('输入的账号或密码不符合要求')
+      }
+    })
   }
 
   getUsers = async () => {
@@ -149,6 +160,17 @@ export default class User extends Component {
     this.getUsers()
   }
 
+/*   componentDidUpdate(prevProps, prevState) {
+    if (this.state.isShow) {
+      // 对所有表单字段进行检验
+      this.form.validateFields(async (err, values) => {
+        // 检验成功
+        if (!err) {
+          this.setState({modalOkBtn: false})
+        }
+      });
+    }
+  } */
 
   render() {
 

@@ -5,12 +5,16 @@ import {
   Icon,
   Input,
   Button,
+  Modal,
+  message
 } from 'antd'
 import {connect} from 'react-redux'
 
 import './login.less'
 import logo from '../../assets/images/logo.jpg'
 import {login} from '../../redux/actions'
+import UserForm from '../user/user-form'
+import {reqAddOrUpdateUser, reqRoles} from "../../api/index";
 
 const Item = Form.Item // 不能写在import之前
 
@@ -18,6 +22,11 @@ const Item = Form.Item // 不能写在import之前
 登陆的路由组件
  */
 class Login extends Component {
+
+  state = {
+    roles: [], // 所有角色列表
+    isShow: false, // 是否显示确认框
+  }
 
   handleSubmit = (event) => {
 
@@ -73,7 +82,54 @@ class Login extends Component {
     // callback('xxxx') // 验证失败, 并指定提示的文本
   }
 
+  /*
+  显示注册界面
+   */
+  showAdd = async () => {
+    this.user = null // 去除前面保存的user
+    this.setState({isShow: true})
+    // 获取所有角色列表
+    const {data} = await reqRoles()
+    this.setState({roles: data})
+  }
+
+  /*
+  注册新用户
+   */
+  addUser = async (event) => {
+    
+    // 对所有表单字段进行检验
+    this.form.validateFields(async (err, values) => {
+      // 检验成功
+      if (!err) {
+        // 1. 收集输入数据
+        const user = this.form.getFieldsValue()
+        
+        
+        // console.log('注册用户：', user);
+        
+        // 2. 提交添加的请求
+        const result = await reqAddOrUpdateUser(user)
+        // 3. 更新列表显示
+        if(result.status===0) {
+          // 关闭对话框
+          this.setState({isShow: false})
+          // 清空表单
+          this.form.resetFields()
+          message.success(`注册用户成功`)
+        } else {
+          message.error(result.msg)
+        }
+
+      } else {
+        message.error('输入的账号或密码不符合要求')
+      }
+    })
+  }
+
   render () {
+
+    const { isShow, roles } = this.state;
 
     // 如果用户已经登陆, 自动跳转到管理界面
     const user = this.props.user
@@ -92,7 +148,13 @@ class Login extends Component {
           <h1>React项目: 后台管理系统</h1>
         </header>
         <section className="login-content">
-          <div className={user.errorMsg ? 'error-msg show' : 'error-msg'}>{user.errorMsg}</div>
+          {
+          user.errorMsg && 
+            function() {
+              message.error(user.errorMsg) 
+              user.errorMsg = ''
+            }()
+          }
           <h2>用户登陆</h2>
           <Form onSubmit={this.handleSubmit} className="login-form">
             <Item>
@@ -114,7 +176,7 @@ class Login extends Component {
                     { max: 12, message: '用户名最多12位' },
                     { pattern: /^[a-zA-Z0-9_]+$/, message: '用户名必须是英文、数字或下划线组成' },
                   ],
-                  initialValue: 'admin', // 初始值
+                  initialValue: '', // 初始值
                 })(
                   <Input
                     prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
@@ -147,6 +209,21 @@ class Login extends Component {
               </Button>
             </Form.Item>
           </Form>
+          <Button type='primary' className="register-button" onClick={this.showAdd}>注册</Button>
+          <Modal
+            title={'注册用户'}
+            visible={isShow}
+            onOk={this.addUser}
+            onCancel={() => {
+              this.form.resetFields()
+              this.setState({isShow: false})
+            }}
+          >
+            <UserForm
+              setForm={form => this.form = form}
+              roles={roles}
+            />
+          </Modal>
         </section>
       </div>
     )
