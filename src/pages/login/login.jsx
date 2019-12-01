@@ -172,7 +172,7 @@ class Login extends Component {
                   // 声明式验证: 直接使用别人定义好的验证规则进行验证
                   rules: [
                     { required: true, whitespace: true, message: '用户名必须输入' },
-                    { min: 4, message: '用户名至少4位' },
+                    { min: 2, message: '用户名至少2位' },
                     { max: 12, message: '用户名最多12位' },
                     { pattern: /^[a-zA-Z0-9_]+$/, message: '用户名必须是英文、数字或下划线组成' },
                   ],
