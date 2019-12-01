@@ -174,7 +174,7 @@ class Login extends Component {
                     { required: true, whitespace: true, message: '用户名必须输入' },
                     { min: 2, message: '用户名至少2位' },
                     { max: 12, message: '用户名最多12位' },
-                    { pattern: /^[a-zA-Z0-9_]+$/, message: '用户名必须是英文、数字或下划线组成' },
+                    // { pattern: /^[a-zA-Z0-9_]+$/, message: '用户名必须是英文、数字或下划线组成' },
                   ],
                   initialValue: '', // 初始值
                 })(
