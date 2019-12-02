@@ -186,7 +186,7 @@ export default class User extends Component {
           rowKey='_id'
           dataSource={users}
           columns={this.columns}
-          pagination={{defaultPageSize: 2}}
+          pagination={{defaultPageSize: 5}}
         />
 
         <Modal

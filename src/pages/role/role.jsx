@@ -187,7 +187,7 @@ class Role extends Component {
           rowKey='_id'
           dataSource={roles}
           columns={this.columns}
-          pagination={{defaultPageSize: PAGE_SIZE}}
+          pagination={{defaultPageSize: 5}}
           rowSelection={{
             type: 'radio',
             selectedRowKeys: [role._id],
