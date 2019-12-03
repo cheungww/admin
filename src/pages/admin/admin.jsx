@@ -5,6 +5,7 @@ import {connect} from 'react-redux'
 
 import LeftNav from '../../components/left-nav'
 import Header from '../../components/header'
+/* 
 import Home from '../home/home'
 import Category from '../category/category'
 import Product from '../product/product'
@@ -13,8 +14,22 @@ import User from '../user/user'
 import Bar from '../charts/bar'
 import Line from '../charts/line'
 import Pie from '../charts/pie'
-import NotFound from '../not-found/not-found'
+import NotFound from '../not-found/not-found' */
 // import Order from '../order/order'
+
+
+import asyncComponent from "../../components/AsyncComponent.js";
+
+// 异步动态导入组件
+const AsyncHome = asyncComponent(() => import("../home/home"));
+const AsyncCategory = asyncComponent(() => import("../category/category"));
+const AsyncProduct = asyncComponent(() => import("../product/product"));
+const AsyncRole = asyncComponent(() => import("../role/role"));
+const AsyncUser = asyncComponent(() => import("../user/user"));
+const AsyncBar = asyncComponent(() => import("../charts/bar"));
+const AsyncLine = asyncComponent(() => import("../charts/line"));
+const AsyncPie = asyncComponent(() => import("../charts/pie"));
+const AsyncNotFound = asyncComponent(() => import("../not-found/not-found"));
 
 const { Footer, Sider, Content } = Layout
 
@@ -39,16 +54,16 @@ class Admin extends Component {
           <Content style={{margin: 20, backgroundColor: '#fff'}}>
             <Switch>
               <Redirect exact from='/' to='/home'/>
-              <Route path='/home' component={Home}/>
-              <Route path='/category' component={Category}/>
-              <Route path='/product' component={Product}/>
-              <Route path='/role' component={Role}/>
-              <Route path='/user' component={User}/>
-              <Route path='/charts/bar' component={Bar}/>
-              <Route path='/charts/line' component={Line}/>
-              <Route path='/charts/pie' component={Pie}/>
+              <Route path='/home' component={AsyncHome}/>
+              <Route path='/category' component={AsyncCategory}/>
+              <Route path='/product' component={AsyncProduct}/>
+              <Route path='/role' component={AsyncRole}/>
+              <Route path='/user' component={AsyncUser}/>
+              <Route path='/charts/bar' component={AsyncBar}/>
+              <Route path='/charts/line' component={AsyncLine}/>
+              <Route path='/charts/pie' component={AsyncPie}/>
               {/* <Route path="/order" component={Order}/> */}
-              <Route component={NotFound}/> {/*上面没有一个匹配, 直接显示*/}
+              <Route component={AsyncNotFound}/> {/*上面没有一个匹配, 直接显示*/}
             </Switch>
           </Content>
           <Footer style={{textAlign: 'center', color: '#cccccc'}}>推荐使用谷歌浏览器，可以获得更佳页面操作体验</Footer>
