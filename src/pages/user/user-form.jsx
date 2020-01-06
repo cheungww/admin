@@ -51,6 +51,18 @@ class UserForm extends PureComponent {
     // callback('xxxx') // 验证失败, 并指定提示的文本
   }
 
+  // 寻找角色对应的id
+  findRoleId = (roles, RoleName) => {
+    let index;
+    roles.forEach((role, i) => {
+      if (role.name === RoleName) {
+        index = i;
+        return;
+      }
+    });
+    return roles[index]._id;
+  }
+
   UNSAFE_componentWillMount () {
     this.props.setForm(this.props.form)
   }
@@ -125,8 +137,8 @@ class UserForm extends PureComponent {
 
         <Item label='角色'>
           {
-            getFieldDecorator('role_id', {
-              initialValue: user.role_id,
+            getFieldDecorator('role_id', { // 默认角色是系统管理员
+              initialValue: user.role_id || (roles.length && this.findRoleId(roles, "系统管理员")),
             })(
               <Select>
                 {
